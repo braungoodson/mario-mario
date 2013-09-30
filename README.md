@@ -32,7 +32,6 @@ luigi.plumbing({
 	},
 	socket: {
 		'unicast:echo' : function (q) {
-			console.log('Fullfilling IO Request.');
 			return q.io.emit('unicast:echo','unicast:echo');
 		},
 		'broadcast:echo' : function (q) {
