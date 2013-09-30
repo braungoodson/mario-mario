@@ -8,36 +8,36 @@ Usage
 =====
 
 <pre>
-	var luigi = require('luigi');
-	luigi.plumbing({
-		port: 10000,
-		http: {
-			get: {
-				'/' : function (q,r) {
-					return r.send('<!doctype html><html><script src=\'socket.io/socket.io.js\'></script></html>');
-				},
-				'/echo' : function (q,r) {
-					return r.send({
-						echo : 'GET /echo'
-					});
-				}
+var luigi = require('luigi');
+luigi.plumbing({
+	port: 10000,
+	http: {
+		get: {
+			'/' : function (q,r) {
+				return r.send('<!doctype html><html><script src=\'socket.io/socket.io.js\'></script></html>');
 			},
-			post: {
-				'/echo' : function (q,r) {
-					return r.send({
-						echo : 'POST /echo'
-					});
-				}
+			'/echo' : function (q,r) {
+				return r.send({
+					echo : 'GET /echo'
+				});
 			}
 		},
-		socket: {
-			'unicast:echo' : function (q) {
-				console.log('Fullfilling IO Request.');
-				return q.io.emit('unicast:echo','unicast:echo');
-			},
-			'broadcast:echo' : function (q) {
-				return q.io.broadcast('broadcast:echo','broadcast:echo');
+		post: {
+			'/echo' : function (q,r) {
+				return r.send({
+					echo : 'POST /echo'
+				});
 			}
 		}
-	});
+	},
+	socket: {
+		'unicast:echo' : function (q) {
+			console.log('Fullfilling IO Request.');
+			return q.io.emit('unicast:echo','unicast:echo');
+		},
+		'broadcast:echo' : function (q) {
+			return q.io.broadcast('broadcast:echo','broadcast:echo');
+		}
+	}
+});
 </pre>
