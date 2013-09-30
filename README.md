@@ -14,7 +14,7 @@ luigi.plumbing({
 	http: {
 		get: {
 			'/' : function (q,r) {
-				return r.send('<!doctype html><html><script src=\'socket.io/socket.io.js\'></script></html>');
+				return r.send('\<!doctype html><html><script src=\'socket.io/socket.io.js\'></script></html>');
 			},
 			'/echo' : function (q,r) {
 				return r.send({
