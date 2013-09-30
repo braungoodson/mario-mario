@@ -8,12 +8,9 @@ module.exports = {
 				console.log('socket://'+io+' -> '+ios[io]);
 			}
 			this.server.io.route(io,(function(server,f){
-				console.log('New IO Route.');
 				return function (q) {
-					console.log('New IO Response.');
 					q.io.broadcast = server.io.broadcast;
 					f(q);
-					console.log('IO Response Fullfilled.');
 				}
 			}(this.server,ios[io])));
 		}
@@ -94,7 +91,6 @@ module.exports = {
 		},
 		socket: {
 			'unicast:echo' : function (q) {
-				console.log('Fullfilling IO Request.');
 				return q.io.emit('unicast:echo','unicast:echo');
 			},
 			'broadcast:echo' : function (q) {
