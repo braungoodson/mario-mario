@@ -67,8 +67,8 @@ module.exports = {
 
 	Usage:
 
-	var luigi = require('luigi');
-	luigi.plumbing({
+	var mario = require('mario');
+	mario.plumbing({
 		port: 10000,
 		http: {
 			get: {

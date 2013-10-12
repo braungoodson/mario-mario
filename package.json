@@ -1,8 +1,8 @@
 {
-  "name": "luigi",
+  "name": "mario-mario",
   "version": "0.0.1",
-  "description": "Quick and easy class for defining your plumbing with express.io for HTTP and Socket IO.",
-  "main": "luigi.js",
+  "description": "Quick and easy class for defining your plumbing with express.io and socket.io for RESTful and Web Sockets programming.",
+  "main": "mario-mario.js",
   "dependencies": {
     "express.io": "~1.1.13"
   },
@@ -12,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/braungoodson/luigi"
+    "url": "https://github.com/braungoodson/mario-mario"
   },
   "keywords": [
     "socket",
