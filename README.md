@@ -1,15 +1,15 @@
-luigi
+mario-mario
 =====
 
-Quick and easy class for defining your plumbing with express.io for HTTP and Socket IO.
+Quick and easy class for defining your plumbing with express.io and socket.io for RESTful and Web Sockets programming.
 
 
 Usage
 =====
 
 <pre>
-var luigi = require('luigi');
-luigi.plumbing({
+var mario = require('mario');
+mario.plumbing({
 	port: 10000,
 	http: {
 		get: {
