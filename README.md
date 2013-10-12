@@ -1,4 +1,4 @@
-mario-mario
+mario-mario [![Build Status](https://travis-ci.org/braungoodson/mario-mario.js.png?branch=master)](https://travis-ci.org/braungoodson/mario-mario.js)
 =====
 
 Quick and easy class for defining your plumbing with express.io and socket.io for RESTful and Web Sockets programming.
