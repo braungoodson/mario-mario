@@ -1,13 +1,3 @@
-script: 
-	- echo "mario-mario for travis-ci"
-before_script: 
-	- echo "* Before Script"
-	- echo "* Before Script 2"
-after_script: 
-	- echo "* After Script"
-	- echo "* After Script 2"
-install: 
- 	- npm install
 language: node_js
 node_js:
 	- 0.10.17
