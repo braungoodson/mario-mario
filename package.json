@@ -14,17 +14,13 @@
     "url": "https://github.com/braungoodson/mario-mario"
   },
   "keywords": [
-    "socket",
     "io",
     "http",
     "router",
     "routing",
     "socket",
-    "router",
     "http",
-    "router",
-    "express.io",
-    "router"
+    "express.io"
   ],
   "author": "Braun Goodson <braungoodson@gmail.com>",
   "license": "BSD-2-Clause",
