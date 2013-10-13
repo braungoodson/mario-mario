@@ -7,7 +7,8 @@
     "express.io": "~1.1.13"
   },
   "scripts": {
-    "test": "mocha"
+    "unit-test": "mocha",
+    "integration-test": "karma start"
   },
   "repository": {
     "type": "git",
@@ -30,6 +31,7 @@
   "license": "BSD-2-Clause",
   "devDependencies": {
     "mocha": "~1.13.0",
-    "expect.js": "~0.2.0"
+    "expect.js": "~0.2.0",
+    "karma": "~0.10.2"
   }
 }
