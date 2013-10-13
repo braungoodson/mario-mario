@@ -7,7 +7,7 @@
     "express.io": "~1.1.13"
   },
   "scripts": {
-    "test": "node_modules/mocha/bin/mocha test/mario-mario.unit.suite.js"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
@@ -30,6 +30,7 @@
   "license": "BSD-2-Clause",
   "devDependencies": {
     "mocha": "~1.13.0",
-    "expect.js": "~0.2.0"
+    "expect.js": "~0.2.0",
+    "karma": "~0.10.2"
   }
 }
