@@ -7,7 +7,7 @@
     "express.io": "~1.1.13"
   },
   "scripts": {
-    "test": "node_modules/mocha/bin/mocha"
+    "test": "node_modules/mocha/bin/mocha test/mario-mario.unit.suite.js"
   },
   "repository": {
     "type": "git",
