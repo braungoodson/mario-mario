@@ -1,6 +1,6 @@
 {
   "name": "mario-mario",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Quick and easy class for defining your plumbing with express.io and socket.io for RESTful and Web Sockets programming.",
   "main": "mario-mario.js",
   "dependencies": {
