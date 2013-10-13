@@ -7,8 +7,7 @@
     "express.io": "~1.1.13"
   },
   "scripts": {
-    "unit-test": "mocha",
-    "integration-test": "karma start"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
