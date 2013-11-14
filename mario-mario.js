@@ -1,5 +1,25 @@
 module.exports = {
-  express: null,
+	cache: {
+		files: {
+			fs: null,
+			files: [],
+			store: function (f) {
+				this.fs.readFile(f,function(e,d){
+					if (e) {
+						console.log('Error: Could not read file: %s',f);
+					} else {
+						this.files[f] = d;
+						console.log('Cache: File %s is now cached!',f);
+					}
+				});
+			},
+			init: function () {
+				this.fs = require('fs');
+				this.files = [];
+			}
+		}
+	},
+	express: null,
 	server: null,
 	port: null,
 	debug: null,
@@ -11,7 +31,7 @@ module.exports = {
 			this.server.io.route(io,(function(server,f){
 				return function (q) {
 					q.io.broadcast = server.io.broadcast;
-					f(q);
+					f(q,this.cache);
 				}
 			}(this.server,ios[io])));
 		}
@@ -21,7 +41,7 @@ module.exports = {
 			if (this.debug) {
 				console.log('http://localhost:'+this.port+p+' -> '+posts[p]);
 			}
-			this.server.post(p,posts[p]);
+			this.server.post(p,posts[p],this.cache);
 		}
 	},
 	parseGets: function (gets) {
@@ -29,7 +49,7 @@ module.exports = {
 			if (this.debug) {
 				console.log('http://localhost:'+this.port+g+' -> '+gets[g]);
 			}
-			this.server.get(g,gets[g]);
+			this.server.get(g,gets[g],this.cache);
 		}
 	},
 	parseRoutes: function(routes) {
@@ -56,13 +76,14 @@ module.exports = {
 		} else {
 			this.debug = false;
 		}
+		this.cache.files.init();
 		this.express = require('express.io');
-    this.server = this.express();
-    this.server.use(this.express.cookieParser());
-    this.server.use(this.express.session({
-      secret: 'This is my secret, and I can use it if I want to.'
-    }));
-    this.server.http().io();
+		this.server = this.express();
+		this.server.use(this.express.cookieParser());
+		this.server.use(this.express.session({
+			secret: 'This is my secret, and I can use it if I want to.'
+		}));
+		this.server.http().io();
 		this.server.listen(this.port);
 		this.parseRoutes(routes);
 		return this;
