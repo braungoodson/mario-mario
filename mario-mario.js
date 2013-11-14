@@ -1,4 +1,5 @@
 module.exports = {
+  express: null,
 	server: null,
 	port: null,
 	debug: null,
@@ -55,8 +56,13 @@ module.exports = {
 		} else {
 			this.debug = false;
 		}
-		this.server = require('express.io')();
-		this.server.http().io();
+		this.express = require('express.io');
+    this.server = this.express();
+    this.server.use(this.express.cookieParser());
+    this.server.use(this.express.session({
+      secret: 'This is my secret, and I can use it if I want to.'
+    }));
+    this.server.http().io();
 		this.server.listen(this.port);
 		this.parseRoutes(routes);
 		return this;
