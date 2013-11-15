@@ -39,11 +39,11 @@ module.exports = {
 			if (this.debug) {
 				console.log('http://localhost:'+this.port+p+' -> '+posts[p]);
 			}
-			this.server.post(p,(function(f,c)
+			this.server.post(p,(function(f,c){
 				return function (q,r) {
 					f(q,r,c);
 				}
-			{})(posts[p],this.cache));
+			})(posts[p],this.cache));
 		}
 	},
 	parseGets: function (gets) {
