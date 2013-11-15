@@ -1,7 +1,8 @@
 module.exports = {
 	cache: {
 		fs: null,
-		files: [],
+		files: null,
+    users: null,
 		storeFile: function (f) {
 			this.fs.readFile(f,function(e,d){
 				if (e) {
@@ -15,12 +16,9 @@ module.exports = {
 		init: function () {
 			this.fs = require('fs');
 			this.files = [];
+      this.users = [];
 		}
 	},
-  users: [],
-  storeUser: function (u) {
-    return module.exports.cache.users.push({name:u.name,password:u.password,token:u.token});
-  },
 	express: null,
 	server: null,
 	port: null,
