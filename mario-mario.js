@@ -1,22 +1,20 @@
 module.exports = {
 	cache: {
-		files: {
-			fs: null,
-			files: [],
-			store: function (f) {
-				this.fs.readFile(f,function(e,d){
-					if (e) {
-						console.log('Error: Could not read file: %s',f);
-					} else {
-						this.files[f] = d;
-						console.log('Cache: File %s is now cached!',f);
-					}
-				});
-			},
-			init: function () {
-				this.fs = require('fs');
-				this.files = [];
-			}
+		fs: null,
+		files: [],
+		storeFile: function (f) {
+			this.fs.readFile(f,function(e,d){
+				if (e) {
+					console.log('Error: Could not read file: %s',f);
+				} else {
+					module.exports.cache.files[f] = d;
+					console.log('Cache: File %s is now cached!',f);
+				}
+			});
+		},
+		init: function () {
+			this.fs = require('fs');
+			this.files = [];
 		}
 	},
 	express: null,
@@ -28,12 +26,12 @@ module.exports = {
 			if (this.debug) {
 				console.log('socket://'+io+' -> '+ios[io]);
 			}
-			this.server.io.route(io,(function(server,f){
+			this.server.io.route(io,(function(server,f,c){
 				return function (q) {
 					q.io.broadcast = server.io.broadcast;
-					f(q,this.cache);
+					f(q,c);
 				}
-			}(this.server,ios[io])));
+			}(this.server,ios[io],this.cache)));
 		}
 	},
 	parsePosts: function (posts) {
@@ -41,7 +39,11 @@ module.exports = {
 			if (this.debug) {
 				console.log('http://localhost:'+this.port+p+' -> '+posts[p]);
 			}
-			this.server.post(p,posts[p],this.cache);
+			this.server.post(p,(function(f,c)
+				return function (q,r) {
+					f(q,r,c);
+				}
+			{})(posts[p],this.cache));
 		}
 	},
 	parseGets: function (gets) {
@@ -49,7 +51,11 @@ module.exports = {
 			if (this.debug) {
 				console.log('http://localhost:'+this.port+g+' -> '+gets[g]);
 			}
-			this.server.get(g,gets[g],this.cache);
+			this.server.get(g,(function(f,c){
+				return function (q,r) {
+					f(q,r,c);
+				}
+			})(gets[g],this.cache));
 		}
 	},
 	parseRoutes: function(routes) {
@@ -65,6 +71,11 @@ module.exports = {
 			this.parseIos(routes.socket);
 		}
 	},
+	parseFileCache: function (A) {
+		for (var i in A) {
+			this.cache.storeFile(A[i]);
+		}
+	},
 	plumbing: function (routes) {
 		if (routes.port) {
 			this.port = routes.port;
@@ -76,7 +87,7 @@ module.exports = {
 		} else {
 			this.debug = false;
 		}
-		this.cache.files.init();
+		this.cache.init();
 		this.express = require('express.io');
 		this.server = this.express();
 		this.server.use(this.express.cookieParser());
@@ -85,6 +96,7 @@ module.exports = {
 		}));
 		this.server.http().io();
 		this.server.listen(this.port);
+		this.parseFileCache(routes.fileCache);
 		this.parseRoutes(routes);
 		return this;
 	}
