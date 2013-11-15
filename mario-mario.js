@@ -17,6 +17,10 @@ module.exports = {
 			this.files = [];
 		}
 	},
+  users: [],
+  storeUser: function (u) {
+    return module.exports.cache.users.push({name:u.name,password:u.password,token:u.token});
+  },
 	express: null,
 	server: null,
 	port: null,
