@@ -1,22 +1,21 @@
+var fs = require('fs');
+var files = [];
+// TODO: Heapify users!
+var users = [];
 module.exports = {
 	cache: {
-		fs: null,
-		files: null,
-    users: null,
 		storeFile: function (f) {
-			this.fs.readFile(f,function(e,d){
+			fs.readFile(f,function(e,d){
 				if (e) {
 					console.log('Error: Could not read file: %s',f);
 				} else {
-					module.exports.cache.files[f] = d;
+					files[f] = d;
 					console.log('Cache: File %s is now cached!',f);
 				}
 			});
 		},
-		init: function () {
-			this.fs = require('fs');
-			this.files = [];
-      this.users = [];
+		storeUser: function (u) {
+			users.push(u);
 		}
 	},
 	express: null,
@@ -28,12 +27,12 @@ module.exports = {
 			if (this.debug) {
 				console.log('socket://'+io+' -> '+ios[io]);
 			}
-			this.server.io.route(io,(function(server,f,c){
+			this.server.io.route(io,(function(server,f){
 				return function (q) {
 					q.io.broadcast = server.io.broadcast;
-					f(q,c);
+					f(q,files,users);
 				}
-			}(this.server,ios[io],this.cache)));
+			}(this.server,ios[io])));
 		}
 	},
 	parsePosts: function (posts) {
@@ -41,11 +40,11 @@ module.exports = {
 			if (this.debug) {
 				console.log('http://localhost:'+this.port+p+' -> '+posts[p]);
 			}
-			this.server.post(p,(function(f,c){
+			this.server.post(p,(function(f){
 				return function (q,r) {
-					f(q,r,c);
+					f(q,r,files,users);
 				}
-			})(posts[p],this.cache));
+			})(posts[p]));
 		}
 	},
 	parseGets: function (gets) {
@@ -53,11 +52,11 @@ module.exports = {
 			if (this.debug) {
 				console.log('http://localhost:'+this.port+g+' -> '+gets[g]);
 			}
-			this.server.get(g,(function(f,c){
+			this.server.get(g,(function(f){
 				return function (q,r) {
-					f(q,r,c);
+					f(q,r,files,users);
 				}
-			})(gets[g],this.cache));
+			})(gets[g]));
 		}
 	},
 	parseRoutes: function(routes) {
@@ -79,17 +78,12 @@ module.exports = {
 		}
 	},
 	plumbing: function (routes) {
-		if (routes.port) {
-			this.port = routes.port;
-		} else {
-			this.port = 10000;
-		}
+		this.port = process.env.PORT || 10000;
 		if (routes.debug) {
 			this.debug = routes.debug;
 		} else {
 			this.debug = false;
 		}
-		this.cache.init();
 		this.express = require('express.io');
 		this.server = this.express();
 		this.server.use(this.express.cookieParser());
@@ -110,7 +104,6 @@ module.exports = {
 
 	var mario = require('mario');
 	mario.plumbing({
-		port: 10000,
 		http: {
 			get: {
 				'/' : function (q,r) {
