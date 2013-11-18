@@ -15,7 +15,7 @@ module.exports = {
 			});
 		},
 		storeUser: function (u) {
-			users.push(u);
+			users[u.name] = u;
 		}
 	},
 	express: null,
@@ -94,6 +94,7 @@ module.exports = {
 		this.server.listen(this.port);
 		this.parseFileCache(routes.fileCache);
 		this.parseRoutes(routes);
+		this.cache.storeUser({name:'braun',password:'braun'});
 		return this;
 	}
 }
