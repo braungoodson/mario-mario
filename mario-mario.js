@@ -3,21 +3,6 @@ var files = [];
 // TODO: Heapify users!
 var users = [];
 module.exports = {
-	cache: {
-		storeFile: function (f) {
-			fs.readFile(f,function(e,d){
-				if (e) {
-					console.log('Error: Could not read file: %s',f);
-				} else {
-					files[f] = d;
-					console.log('Cache: File %s is now cached!',f);
-				}
-			});
-		},
-		storeUser: function (u) {
-			users[u.name] = u;
-		}
-	},
 	express: null,
 	server: null,
 	port: null,
@@ -30,7 +15,7 @@ module.exports = {
 			this.server.io.route(io,(function(server,f){
 				return function (q) {
 					q.io.broadcast = server.io.broadcast;
-					f(q,files,users);
+					f(q);
 				}
 			}(this.server,ios[io])));
 		}
@@ -42,7 +27,7 @@ module.exports = {
 			}
 			this.server.post(p,(function(f){
 				return function (q,r) {
-					f(q,r,files,users);
+					f(q,r);
 				}
 			})(posts[p]));
 		}
@@ -54,7 +39,7 @@ module.exports = {
 			}
 			this.server.get(g,(function(f){
 				return function (q,r) {
-					f(q,r,files,users);
+					f(q,r);
 				}
 			})(gets[g]));
 		}
@@ -72,11 +57,6 @@ module.exports = {
 			this.parseIos(routes.socket);
 		}
 	},
-	parseFileCache: function (A) {
-		for (var i in A) {
-			this.cache.storeFile(A[i]);
-		}
-	},
 	plumbing: function (routes) {
 		this.port = process.env.PORT || 10000;
 		if (routes.debug) {
@@ -92,9 +72,7 @@ module.exports = {
 		}));
 		this.server.http().io();
 		this.server.listen(this.port);
-		this.parseFileCache(routes.fileCache);
 		this.parseRoutes(routes);
-		this.cache.storeUser({name:'braun',password:'braun'});
 		return this;
 	}
 }
